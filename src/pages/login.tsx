@@ -3,12 +3,22 @@ import NextLink from "next/link"
 import loginImage from "../../public/assets/login-image.gif"
 import { Checkbox } from "@/components/ui/checkbox";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const singInFormSchema = z.object({
+  email: z.email("Digite um email").nonempty("O e-mail é obrigatório"),
+  password: z.string().nonempty("A senha é obrigatória").min(8, "A senha deve ter pelo menos 8 caracteres"),
+});
+
+type SignInFormData = z.infer<typeof singInFormSchema>
 
 export default function Login() {
 
-
-
-
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(singInFormSchema)
+  });
 
   return (
     <Flex w="100vw" h="100vh">
@@ -24,18 +34,20 @@ export default function Login() {
 
           <VStack align="flex-start" gap={6} mt="10">
 
-            <Field.Root>
+            <Field.Root invalid={!!errors.email}>
               <Field.Label color="gray.500" fontSize="md">
                 Email <Field.RequiredIndicator />
               </Field.Label>
-              <Input type="email" h={16} colorPalette="blue" borderRadius="md" color="black" />
+              <Input type="email" h={16} colorPalette="blue" borderRadius="md" color="black" {...register("email")} />
+              <Field.ErrorText>{errors.email?.message}</Field.ErrorText>
             </Field.Root>
 
-            <Field.Root>
+            <Field.Root invalid={!!errors.password}>
               <Field.Label color="gray.500" fontSize="md">
                 Senha <Field.RequiredIndicator />
               </Field.Label>
-              <PasswordInput  h={16} colorPalette="blue" borderRadius="md" color="black" />
+              <PasswordInput h={16} colorPalette="blue" borderRadius="md" color="black" {...register("password")} />
+              <Field.ErrorText>{errors.password?.message}</Field.ErrorText>
             </Field.Root>
 
 
