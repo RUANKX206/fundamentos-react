@@ -6,7 +6,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "@/contexts/SessionContext";
+import { userSession } from "@/contexts/SessionContext";
 import { useEffect } from "react";
 
 const singInFormSchema = z.object({
@@ -19,7 +19,7 @@ type SignInFormData = z.infer<typeof singInFormSchema>
 export default function Login() {
 
 
-  const { user, updateUser} = useSession();
+  const { user, updateUser} = userSession();
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(singInFormSchema)
