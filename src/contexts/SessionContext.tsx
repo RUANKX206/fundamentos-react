@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { Children, createContext, ReactNode, useContext, useState } from "react";
 
 type User = {
   id: string;
@@ -13,5 +13,28 @@ type sessionContextData = {
   updateUser: (user: User) => Promise<void>;
 }
 
-const sessionContext = createContext({} as sessionContextData);
+const SessionContext = createContext({} as sessionContextData);
+
+interface SessionProviderProps {
+
+  children: ReactNode;
+}
+
+export function SessionProvider({ children }: SessionProviderProps) {
+
+  const [user, setUser] = useState<User>({} as User);
+
+  async function updateUser(user: User) {
+    setUser(user);
+  }
+
+  return (
+    <SessionContext.Provider value={{ user, updateUser }}>
+      {children}
+    </SessionContext.Provider>
+  );
+}
+
+
+export const useSession = () => useContext(SessionContext);
 

@@ -1,5 +1,6 @@
 import { AppProps } from "next/app";
 import { Provider } from "@/components/ui/provider";
+import { SessionProvider } from "@/contexts/SessionContext";
 
 
 
@@ -7,7 +8,9 @@ import { Provider } from "@/components/ui/provider";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider>
-      <Component {...pageProps} />
+      <SessionProvider>
+        <Component {...pageProps} />
+      </SessionProvider>
     </Provider>
   );
 }

@@ -6,6 +6,8 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "@/contexts/SessionContext";
+import { useEffect } from "react";
 
 const singInFormSchema = z.object({
   email: z.email("Digite um email").nonempty("O e-mail é obrigatório"),
@@ -16,13 +18,21 @@ type SignInFormData = z.infer<typeof singInFormSchema>
 
 export default function Login() {
 
+
+  const { user, updateUser} = useSession();
+
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(singInFormSchema)
   });
 
   function handleSignIn(data: SignInFormData) {
     console.log(data);
+    updateUser({id:"teste", email: data.email, cpf:"12345678910", fullName: "kowal ruan", avatarUrl: ".sjdsjdas"})
   }
+
+  useEffect (() => {
+    console.log(user)
+  },[user])
 
   return (
     <Flex w="100vw" h="100vh">
